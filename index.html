@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <title>Tetris</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+  <!-- ─── LOGIN SCREEN ─── -->
+  <div class="screen" id="login-screen">
+    <div class="login-box">
+      <h1>TETRIS</h1>
+      <label>Username</label>
+      <input type="text" id="username" placeholder="player_one" autocomplete="off" autocapitalize="none"/>
+      <label>Password</label>
+      <input type="password" id="password" placeholder="••••••••"/>
+      <div class="login-error" id="login-error"></div>
+      <button class="btn-login" id="login-btn">LOGIN</button>
+    </div>
+  </div>
+
+  <!-- ─── GAME SCREEN ─── -->
+  <div class="screen hidden" id="game-screen">
+
+    <!-- TOP BAR (mobile) -->
+    <div id="top-bar">
+      <div class="tb-item">
+        <div class="lbl">Score</div>
+        <div class="val" id="score-val">0</div>
+      </div>
+      <div class="panel-title">TETRIS</div>
+      <div class="tb-item tb-right">
+        <div class="lbl">Next</div>
+        <canvas id="next-canvas" width="60" height="40"></canvas>
+      </div>
+    </div>
+
+    <!-- BOARD -->
+    <div id="board-wrap">
+      <canvas id="board"></canvas>
+      <div id="gameover-overlay">
+        <h2>GAME OVER</h2>
+        <p>Tap START to play again</p>
+      </div>
+    </div>
+
+    <!-- DESKTOP SIDE PANEL -->
+    <div id="panel">
+      <div class="panel-title">TETRIS</div>
+
+      <div class="panel-card">
+        <div class="lbl">Score</div>
+        <div class="val" id="score-val-desktop">0</div>
+      </div>
+
+      <div class="panel-card">
+        <div class="lbl">Next Piece</div>
+        <canvas id="next-canvas-desktop" width="120" height="80"></canvas>
+      </div>
+
+      <div class="diff-group">
+        <div class="lbl">Difficulty</div>
+        <button class="diff-btn active-normal" data-diff="normal">▸ Normal</button>
+        <button class="diff-btn" data-diff="hard">▸ Hard</button>
+        <button class="diff-btn" data-diff="expert">▸ Expert</button>
+      </div>
+
+      <button class="action-btn btn-start" id="btn-start-desktop">▶ START</button>
+      <button class="action-btn btn-restart" id="btn-restart-desktop">↺ RESTART</button>
+      <button class="action-btn btn-logout" id="btn-logout-desktop">⏏ LOGOUT</button>
+
+      <div class="controls">
+        <span>←→</span> Move<br>
+        <span>↑</span> Rotate<br>
+        <span>↓</span> Soft drop<br>
+        <span>Space</span> Hard drop
+      </div>
+    </div>
+
+    <!-- MOBILE CONTROLS -->
+    <div id="mobile-controls">
+
+      <!-- Top row: difficulty + action buttons -->
+      <div id="mobile-top-btns">
+        <div class="diff-group-h">
+          <button class="diff-btn active-normal" data-diff="normal">N</button>
+          <button class="diff-btn" data-diff="hard">H</button>
+          <button class="diff-btn" data-diff="expert">E</button>
+        </div>
+        <div class="mobile-actions">
+          <button class="action-btn btn-start"   id="btn-start">▶</button>
+          <button class="action-btn btn-restart" id="btn-restart">↺</button>
+          <button class="action-btn btn-logout"  id="btn-logout">⏏</button>
+        </div>
+      </div>
+
+      <!-- D-Pad -->
+      <div id="dpad">
+        <div id="dpad-row-top">
+          <button class="dpad-btn" id="btn-rotate">↻</button>
+        </div>
+        <div id="dpad-row-mid">
+          <button class="dpad-btn" id="btn-left">◀</button>
+          <button class="dpad-btn" id="btn-down">▼</button>
+          <button class="dpad-btn" id="btn-right">▶</button>
+        </div>
+        <div id="dpad-row-bot">
+          <button class="dpad-btn dpad-drop" id="btn-drop">▼▼</button>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script src="tetris.js"></script>
+</body>
+</html>
