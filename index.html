@@ -1,123 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
-  <meta name="mobile-web-app-capable" content="yes"/>
-  <meta name="apple-mobile-web-app-capable" content="yes"/>
-  <title>Tetris</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="style.css"/>
-</head>
-<body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>FruitScan</title>
+<link rel="stylesheet" href="style.css"></head><body>
+<div id="login"><div class="lc"><h2 style="margin:0">🥭 FruitScan</h2><div style="color:var(--mu)">Know your fruits. Sign in to continue.</div>
+<div class="tabs"><button id="tu" class="on">User</button><button id="ta">Admin</button></div>
+<input id="lu" placeholder="Username" autocomplete="username"><input id="lp" type="password" placeholder="Password" autocomplete="current-password">
+<div class="err" id="le"></div><button class="btn" id="lb">Log in</button><a class="l" id="reg">New user? Create an account</a>
+</div></div>
 
-  <!-- ─── LOGIN SCREEN ─── -->
-  <div class="screen" id="login-screen">
-    <div class="login-box">
-      <h1>TETRIS</h1>
-      <label>Username</label>
-      <input type="text" id="username" placeholder="player_one" autocomplete="off" autocapitalize="none"/>
-      <label>Password</label>
-      <input type="password" id="password" placeholder="••••••••"/>
-      <div class="login-error" id="login-error"></div>
-      <button class="btn-login" id="login-btn">LOGIN</button>
-    </div>
-  </div>
+<div id="app"><aside><h1>FruitScan<small>Know Your Fruits</small></h1>
+<button class="nv on" data-v="dash">🏠 Dashboard</button><button class="nv" data-v="detect">📷 Detect Fruit</button><button class="nv" data-v="hist">🕘 History</button><button class="nv" data-v="db">🗄 Database</button><button class="nv" data-v="set">⚙ Settings</button><button class="nv" id="out" style="margin-top:auto">⎋ Log out</button></aside>
+<main><header><div><h2 id="wel"></h2><p>Detect fruits, get instant information, and learn about their benefits.</p></div><span class="badge" id="who"></span></header>
 
-  <!-- ─── GAME SCREEN ─── -->
-  <div class="screen hidden" id="game-screen">
+<section id="v-dash"><div class="grid">
+<div class="card rows" id="cap"><h3>📷 Camera Capture</h3><div class="vid" id="vid"><span id="ph">Tap “Capture Image” to start the camera<br>or upload a fruit photo</span><video id="cam" playsinline muted class="hide"></video><canvas id="pv" class="hide"></canvas><span class="live" id="live">● Live Camera</span></div>
+<div class="two"><button class="btn" id="capb">📷 Capture Image</button><button class="btn alt" id="upb">⬆ Upload Image</button></div><input type="file" id="file" accept="image/*" class="hide"><input type="file" id="file2" accept="image/*" capture="environment" class="hide"></div>
+<div class="card"><h3>⚙ Detecting Process</h3><div class="ring"><svg width="130" height="130"><circle cx="65" cy="65" r="56" fill="none" stroke="var(--soft)" stroke-width="8"/><circle id="rc" cx="65" cy="65" r="56" fill="none" stroke="var(--g)" stroke-width="8" stroke-linecap="round" stroke-dasharray="352" stroke-dashoffset="352"/></svg><div id="rt">Idle<br>0%</div></div>
+<ul class="st" id="steps"><li>Preprocessing Image</li><li>Feature Extraction</li><li>Analyzing with Model</li><li>Getting Fruit Information</li></ul></div>
+<div class="card rows res"><h3>🍏 Detection Result</h3><div id="rb"><div class="empty">No detection yet.<br>Capture or upload a fruit image.</div></div></div>
+<div class="card span2"><div class="row"><h3>📊 Detection Statistics</h3></div><div class="stats" id="stats"></div></div>
+<div class="card" style="grid-column:1/-1"><div class="row"><h3>🕘 Recent Detections</h3><button class="btn alt sm" data-go="hist">View All →</button></div><div id="recent"></div></div></div></section>
 
-    <!-- TOP BAR (mobile) -->
-    <div id="top-bar">
-      <div class="tb-item">
-        <div class="lbl">Score</div>
-        <div class="val" id="score-val">0</div>
-      </div>
-      <div class="panel-title">TETRIS</div>
-      <div class="tb-item tb-right">
-        <div class="lbl">Next</div>
-        <canvas id="next-canvas" width="60" height="40"></canvas>
-      </div>
-    </div>
+<section id="v-hist" class="hide"><div class="card"><div class="row"><h3>Detection History</h3><button class="btn alt sm" id="clr">Clear history</button></div><div id="hall"></div></div></section>
+<section id="v-db" class="hide"><div class="card"><h3>Fruit Database</h3><div id="dbl"></div></div></section>
+<section id="v-set" class="hide"><div class="card" style="max-width:480px;display:grid;gap:12px"><h3>Settings</h3>
+<label>Minimum confidence to accept a detection: <b id="thv">60</b>%<input type="range" id="th" min="50" max="90" value="60"></label>
+<label>Theme<br><button class="btn alt sm" id="thm">Toggle light / dark</button></label><div id="adm" class="hide" style="color:var(--mu)">Admin: History shows all users; Database lets you edit fruit info.</div></div></section>
+</main></div>
 
-    <!-- BOARD -->
-    <div id="board-wrap">
-      <canvas id="board"></canvas>
-      <div id="gameover-overlay">
-        <h2>GAME OVER</h2>
-        <p>Tap START to play again</p>
-      </div>
-    </div>
-
-    <!-- DESKTOP SIDE PANEL -->
-    <div id="panel">
-      <div class="panel-title">TETRIS</div>
-
-      <div class="panel-card">
-        <div class="lbl">Score</div>
-        <div class="val" id="score-val-desktop">0</div>
-      </div>
-
-      <div class="panel-card">
-        <div class="lbl">Next Piece</div>
-        <canvas id="next-canvas-desktop" width="120" height="80"></canvas>
-      </div>
-
-      <div class="diff-group">
-        <div class="lbl">Difficulty</div>
-        <button class="diff-btn active-normal" data-diff="normal">▸ Normal</button>
-        <button class="diff-btn" data-diff="hard">▸ Hard</button>
-        <button class="diff-btn" data-diff="expert">▸ Expert</button>
-      </div>
-
-      <button class="action-btn btn-start" id="btn-start-desktop">▶ START</button>
-      <button class="action-btn btn-restart" id="btn-restart-desktop">↺ RESTART</button>
-      <button class="action-btn btn-logout" id="btn-logout-desktop">⏏ LOGOUT</button>
-
-      <div class="controls">
-        <span>←→</span> Move<br>
-        <span>↑</span> Rotate<br>
-        <span>↓</span> Soft drop<br>
-        <span>Space</span> Hard drop
-      </div>
-    </div>
-
-    <!-- MOBILE CONTROLS -->
-    <div id="mobile-controls">
-
-      <!-- Top row: difficulty + action buttons -->
-      <div id="mobile-top-btns">
-        <div class="diff-group-h">
-          <button class="diff-btn active-normal" data-diff="normal">N</button>
-          <button class="diff-btn" data-diff="hard">H</button>
-          <button class="diff-btn" data-diff="expert">E</button>
-        </div>
-        <div class="mobile-actions">
-          <button class="action-btn btn-start"   id="btn-start">▶</button>
-          <button class="action-btn btn-restart" id="btn-restart">↺</button>
-          <button class="action-btn btn-logout"  id="btn-logout">⏏</button>
-        </div>
-      </div>
-
-      <!-- D-Pad -->
-      <div id="dpad">
-        <div id="dpad-row-top">
-          <button class="dpad-btn" id="btn-rotate">↻</button>
-        </div>
-        <div id="dpad-row-mid">
-          <button class="dpad-btn" id="btn-left">◀</button>
-          <button class="dpad-btn" id="btn-down">▼</button>
-          <button class="dpad-btn" id="btn-right">▶</button>
-        </div>
-        <div id="dpad-row-bot">
-          <button class="dpad-btn dpad-drop" id="btn-drop">▼▼</button>
-        </div>
-      </div>
-
-    </div>
-
-  </div>
-
-  <script src="tetris.js"></script>
-</body>
-</html>
+<script src="script.js"></script></body></html>
